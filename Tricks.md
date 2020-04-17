@@ -1,0 +1,1 @@
+In this file I'm going to insert all the tricks for a better experience.
