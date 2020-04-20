@@ -4,8 +4,10 @@ The GNOME Workflow is perfect for me, normally there are few extensions and chan
 ## Extensions
 Here is the list of extensions I use:
 - **Do Not Disturb** Activate or deactivate do not disturb mode (this should be removed with GNOME 3.36)
-- **KStatusNotifierItem/AppIndicator Support** Adds KStatusNotifierItem support to the Shell
 - **Workspace Scroll** Just scroll anywhere in the top panel to change the workspace.
+- **Volume Mixer** Applet allowing separate configuration of PulseAudio mixers.
+~~- **KStatusNotifierItem/AppIndicator Support** Adds KStatusNotifierItem support to the Shell~~
+- **gnome-shell-extension-appindicator** Tray icons (from official repository).
 
 ## Theme
 I'm using the beautiful official Pop theme by making some local changes to make it less space-destroying.
