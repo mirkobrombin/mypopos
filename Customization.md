@@ -3,6 +3,7 @@ The GNOME Workflow is perfect for me, normally there are few extensions and chan
 
 ## Extensions
 Here is the list of extensions I use:
+- **Smart transparent topbar** Permits to change topbar opacity and color when free-floating.
 - **Do Not Disturb** Activate or deactivate do not disturb mode (this should be removed with GNOME 3.36)
 - **Workspace Scroll** Just scroll anywhere in the top panel to change the workspace.
 - **Volume Mixer** Applet allowing separate configuration of PulseAudio mixers.
