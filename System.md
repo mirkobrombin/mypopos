@@ -1,73 +1,73 @@
 ```
-             /////////////                mirko@pop-os 
-         /////////////////////            ------------ 
-      ///////*767////////////////         OS: Pop!_OS 19.10 x86_64 
-    //////7676767676*//////////////       Host: TM1701 
-   /////76767//7676767//////////////      Kernel: 5.3.0-7648-generic 
-  /////767676///*76767///////////////     Uptime: 9 mins 
- ///////767676///76767.///7676*///////    Packages: 2075 (dpkg) 
-/////////767676//76767///767676////////   Shell: zsh 5.7.1 
+             /////////////                mirko@rog 
+         /////////////////////            --------- 
+      ///////*767////////////////         OS: Pop!_OS 20.04 LTS x86_64 
+    //////7676767676*//////////////       Host: Zephyrus G GU502DU_GA502DU 1.0 
+   /////76767//7676767//////////////      Kernel: 5.4.0-7634-generic 
+  /////767676///*76767///////////////     Uptime: 1 min 
+ ///////767676///76767.///7676*///////    Packages: 1853 (dpkg), 18 (flatpak) 
+/////////767676//76767///767676////////   Shell: zsh 5.8 
 //////////76767676767////76767/////////   Resolution: 1920x1080 
-///////////76767676//////7676//////////   DE: GNOME 3.34.3 
-////////////,7676,///////767///////////   WM: GNOME Shell 
+///////////76767676//////7676//////////   DE: GNOME 
+////////////,7676,///////767///////////   WM: Mutter 
 /////////////*7676///////76////////////   WM Theme: Pop 
 ///////////////7676////////////////////   Theme: Pop [GTK2/3] 
  ///////////////7676///767////////////    Icons: Pop [GTK2/3] 
   //////////////////////'////////////     Terminal: gnome-terminal 
-   //////.7676767676767676767,//////      CPU: Intel i5-8250U (8) @ 3.400GHz 
-    /////767676767676767676767/////       GPU: NVIDIA GeForce MX150 
-      ///////////////////////////         GPU: Intel UHD Graphics 620 
-         /////////////////////            Memory: 2611MiB / 7845MiB 
+   //////.7676767676767676767,//////      CPU: AMD Ryzen 7 3750H with Radeon Ve 
+    /////767676767676767676767/////       GPU: AMD ATI 05:00.0 Picasso 
+      ///////////////////////////         GPU: NVIDIA GeForce GTX 1660 Ti Mobil 
+         /////////////////////            Memory: 2332MiB / 15883MiB 
              /////////////
-                                                                  
-
 ```
 
 # Partitions
-I have 2 SSDs in my current setup:
+I have 1 SSD NVMe in my current setup:
 
-- /dev/nvme1n1: 238,49 GiB,
-- /dev/nvme0n1: 465,78 GiB
+- /dev/nvme0n1: 476,96 GiB
 
 ## Partition scheme
 ```
 Device            Start       End   Sectors   Size Type
-/dev/nvme0n1p1     2048  16582654  16580607   7.9G Linux swap
-/dev/nvme0n1p2 16582656  17811454   1228799   600M EFI System
-/dev/nvme0n1p3 17811456 976773119 958961664 457.3G Linux LVM
-
-
-Device         Start       End   Sectors   Size Type
-/dev/nvme1n1p1  2048 500117503 500115456 238.5G Linux LVM
-```
-I installed the system on an LVM volume so you can use both `nvme0n1p3` and `nvme1n1p1` partitions:
-```
-  --- Physical volume ---
-  PV Name               /dev/nvme0n1p3
-  VG Name               MiGroup
-  PV Size               <457.27 GiB / not usable 3.00 MiB
-  Allocatable           yes (but full)
-  PE Size               4.00 MiB
-  Total PE              117060
-  Free PE               0
-  Allocated PE          117060
-  PV UUID               9toe3D-LKs0-tQh6-xT3Y-a7bT-yhPe-YbRu4S
-   
-  --- Physical volume ---
-  PV Name               /dev/nvme1n1p1
-  VG Name               MiGroup
-  PV Size               238.47 GiB / not usable 0   
-  Allocatable           yes (but full)
-  PE Size               4.00 MiB
-  Total PE              61049
-  Free PE               0
-  Allocated PE          61049
-  PV UUID               LuTEIC-fsDY-wwKu-kDmZ-SK3e-ntV3-TrXdBX
+/dev/nvme0n1p1      4096    1023998   1019903   498M EFI System
+/dev/nvme0n1p2   1024000    9412606   8388607     4G Microsoft basic data
+/dev/nvme0n1p3   9412608  991822510 982409903 472,5G Linux filesystem
 ```
 
-## Realtek ALC298 Fix
-The microphone output was not immediately detected but I solved it by adding the following instruction in path `/etc/modprobe.d/alsa-base.conf`:
+## rtl8821ce Network controller
+Out of the box, Wi-Fi doesn't work. We need to install dkms for `rtl8821ce` network controller.
+
+First of all download/clone the [tomaspinho/rtl8821ce](https://github.com/tomaspinho/rtl8821ce) repository, then install essential packages:
 ```
-options snd-hda-intel model=alc298-dell1
+sudo apt install bc module-assistant build-essential dkms
 ```
-reboot and it just works.
+and run `dkms-install.sh` script from inside the cloned repository:
+```
+sudo m-a prepare
+sudo ./dkms-install.sh
+```
+and reboot.
+
+## Nvidia flickering
+Sometimes after a reboot or suspend, the screen shows a flickering. We need to enable `modeset` to fix the problem:
+```
+sudo echo "options nvidia-drm modeset=1" > /etc/modprobe.d/nvidia-drm-nomodeset.conf
+```
+
+## rog-core
+Mine is a Rog laptop, in order to get the keyboard lighting, function buttons and fan modes to work, you need to install [flukejones/rog-core](https://github.com/flukejones/rog-core):
+```
+sudo add-apt-repository ppa:lukedjones/rog-core
+sudo apt-get update
+sudo apt-get install rog-core
+systemctl daemon-reload && systemctl restart rog-core
+```
+So let's give the keyboard some light:
+```
+rog-core -b med
+```
+
+Fan mode can be switch with `-f` option:
+```
+rog-core -f <silent, normal, boost>
+```
