@@ -1,6 +1,9 @@
 # My Pop!_OS Installation
 This is my complete Pop!_OS installation/configuration.
 
+
+> **This repository was moved: https://git.mirko.pm/brombinmirko/mypopos**
+
 <a href="https://linuxpeople.org/show/04-17-2020--04-35-14 pm-my-pop-os" title="pubblicato su linuxpeople"><img alt="pubblicato su linuxpeople" src="https://linuxpeople.org/assets/embed.svg" width="135" height="59" /></a>
 
 ![](https://linuxpeople.org/uploads/FUWgcHOg5JbFHq07699J.png)
